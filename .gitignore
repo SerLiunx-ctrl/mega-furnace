@@ -1,0 +1,10 @@
+Thumbs.db
+.DS_Store
+
+*.zip
+
+factorio-current.log
+factorio-previous.log
+
+write-data/
+tmp/
