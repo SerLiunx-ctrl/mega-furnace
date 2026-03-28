@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2026-03-28
+  Features:
+    - Added the High-Throughput Inserter as a late-game bulk logistics option for giant furnace setups.
+    - Added localized mod title and description entries for in-game mod browsing.
+  Graphics:
+    - Reworked the High-Energy Mega Furnace visuals to better distinguish it from the lower-tier furnace.
+    - Changed the High-Energy Mega Furnace working heater effect to a more distinct blue arc-flame style.
+  Balancing:
+    - Reduced the power usage of both giant furnaces to one quarter of their previous values.
+    - Reduced the pollution output of both giant furnaces to half of their previous values.
+    - Reduced the crafting cost of both giant furnaces to half of their previous values.
+    - Reduced the High-Throughput Inserter crafting cost and power usage.
+    - Made the High-Throughput Inserter hand-craftable.
+    - Set the High-Throughput Inserter to a fixed 30-item pickup stack.
+  Changes:
+    - Restricted the giant furnace recipes to the custom assembling category used by Assembling Machine 3.
+
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2026-03-22
+  Major Features:
+    - Initial release.
+    - Added the Mega Furnace and High-Energy Mega Furnace with dedicated technologies, recipes, and localization.
