@@ -391,8 +391,6 @@ replace_filename_tree(
   "__base__/graphics/entity/express-transport-belt/express-transport-belt.png",
   "__mega_furnace__/graphics/entity/mega-logistics/mega-transport-belt.png"
 )
-mega_transport_belt.belt_animation_set.alternate = true
-mega_transport_belt.belt_animation_set.animation_set.frame_count = 64
 clear_tint_tree(mega_transport_belt.belt_animation_set)
 
 local mega_transport_belt_item = table.deepcopy(data.raw.item["express-transport-belt"])
@@ -439,8 +437,6 @@ replace_filename_tree(
   "__mega_furnace__/graphics/entity/mega-logistics/mega-underground-belt-structure.png"
 )
 clear_tint_tree(mega_underground_belt.belt_animation_set)
-mega_underground_belt.belt_animation_set.alternate = true
-mega_underground_belt.belt_animation_set.animation_set.frame_count = 64
 clear_tint_tree(mega_underground_belt.structure)
 
 local mega_underground_belt_item = table.deepcopy(data.raw.item["express-underground-belt"])
@@ -482,61 +478,39 @@ replace_filename_tree(
   "__base__/graphics/entity/express-transport-belt/express-transport-belt.png",
   "__mega_furnace__/graphics/entity/mega-logistics/mega-transport-belt.png"
 )
-mega_splitter.structure_animation_speed_coefficient = 1.2
-mega_splitter.structure_animation_movement_cooldown = 10
-mega_splitter.structure =
-{
-  north = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-north",
-    {
-      frame_count = 32,
-      priority = "extra-high",
-      scale = 0.5
-    }
-  ),
-  east = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-east",
-    {
-      frame_count = 32,
-      priority = "extra-high",
-      scale = 0.5
-    }
-  ),
-  south = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-south",
-    {
-      frame_count = 32,
-      priority = "extra-high",
-      scale = 0.5
-    }
-  ),
-  west = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-west",
-    {
-      frame_count = 32,
-      priority = "extra-high",
-      scale = 0.5
-    }
-  )
-}
-mega_splitter.structure_patch =
-{
-  north = util.empty_sprite(),
-  east = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-east-top-patch",
-    {
-      frame_count = 32,
-      priority = "extra-high",
-      scale = 0.5
-    }
-  ),
-  south = util.empty_sprite(),
-  west = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-west-top-patch",
-    {
-      frame_count = 32,
-      priority = "extra-high",
-      scale = 0.5
-    }
-  )
-}
+replace_filename_tree(
+  mega_splitter.structure,
+  "__base__/graphics/entity/express-splitter/express-splitter-north.png",
+  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-north.png"
+)
+replace_filename_tree(
+  mega_splitter.structure,
+  "__base__/graphics/entity/express-splitter/express-splitter-east.png",
+  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-east.png"
+)
+replace_filename_tree(
+  mega_splitter.structure,
+  "__base__/graphics/entity/express-splitter/express-splitter-south.png",
+  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-south.png"
+)
+replace_filename_tree(
+  mega_splitter.structure,
+  "__base__/graphics/entity/express-splitter/express-splitter-west.png",
+  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-west.png"
+)
+replace_filename_tree(
+  mega_splitter.structure_patch,
+  "__base__/graphics/entity/express-splitter/express-splitter-east-top_patch.png",
+  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-east-top-patch.png"
+)
+replace_filename_tree(
+  mega_splitter.structure_patch,
+  "__base__/graphics/entity/express-splitter/express-splitter-west-top_patch.png",
+  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-west-top-patch.png"
+)
 clear_tint_tree(mega_splitter.belt_animation_set)
-mega_splitter.belt_animation_set.alternate = true
-mega_splitter.belt_animation_set.animation_set.frame_count = 64
+clear_tint_tree(mega_splitter.structure)
+clear_tint_tree(mega_splitter.structure_patch)
 
 local mega_splitter_item = table.deepcopy(data.raw.item["express-splitter"])
 mega_splitter_item.name = MEGA_SPLITTER_NAME
