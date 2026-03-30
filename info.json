@@ -1,11 +1,12 @@
 {
   "name": "mega_furnace",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "title": "Mega Furnace",
   "author": "SerLiunx",
   "factorio_version": "2.0",
   "dependencies": [
-    "base >= 2.0.0"
+    "base >= 2.0.0",
+    "? space-age >= 2.0.0"
   ],
   "description": "Adds giant late-game electric furnaces with high throughput, heavy power draw, and an upgrade path."
 }
