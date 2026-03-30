@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.2
+Date: 2026-03-30
+  Graphics:
+    - Reworked the High-Throughput logistics visuals to use a purple turbo-tier style with clearer belt animation.
+    - Updated the High-Throughput splitter rendering to use dedicated sprite metadata for the new structure sheets.
+  Compatibility:
+    - Added optional Space Age dependency ordering so dynamic logistics recipes load after turbo-tier content.
+    - Made High-Throughput logistics recipes and crafting order adapt to turbo belts and quantum processors when Space Age is present.
+
+---------------------------------------------------------------------------------------------------
 Version: 0.1.1
 Date: 2026-03-28
   Features:
