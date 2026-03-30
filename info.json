@@ -5,7 +5,8 @@
   "author": "SerLiunx",
   "factorio_version": "2.0",
   "dependencies": [
-    "base >= 2.0.0"
+    "base >= 2.0.0",
+    "? space-age >= 2.0.0"
   ],
   "description": "Adds giant late-game electric furnaces with high throughput, heavy power draw, and an upgrade path."
 }

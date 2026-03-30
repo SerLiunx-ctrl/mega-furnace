@@ -126,6 +126,35 @@ local low_tier_science_packs = {
   "utility-science-pack"
 }
 
+local high_throughput_belt_ingredient = "express-transport-belt"
+if mods["space-age"] and data.raw.item["turbo-transport-belt"] then
+  high_throughput_belt_ingredient = "turbo-transport-belt"
+end
+
+local high_throughput_underground_belt_ingredient = "express-underground-belt"
+if mods["space-age"] and data.raw.item["turbo-underground-belt"] then
+  high_throughput_underground_belt_ingredient = "turbo-underground-belt"
+end
+
+local high_throughput_splitter_ingredient = "express-splitter"
+if mods["space-age"] and data.raw.item["turbo-splitter"] then
+  high_throughput_splitter_ingredient = "turbo-splitter"
+end
+
+local high_throughput_processor_ingredient = "processing-unit"
+if mods["space-age"] and data.raw.item["quantum-processor"] then
+  high_throughput_processor_ingredient = "quantum-processor"
+end
+
+local high_throughput_transport_belt_order = "a[transport-belt]-d[mega-transport-belt]"
+local high_throughput_underground_belt_order = "b[underground-belt]-d[mega-underground-belt]"
+local high_throughput_splitter_order = "c[splitter]-d[mega-splitter]"
+if mods["space-age"] then
+  high_throughput_transport_belt_order = "a[transport-belt]-e[mega-transport-belt]"
+  high_throughput_underground_belt_order = "b[underground-belt]-e[mega-underground-belt]"
+  high_throughput_splitter_order = "c[splitter]-e[mega-splitter]"
+end
+
 local low_tier_tech_ingredients = {}
 local high_tier_tech_ingredients = {}
 local inserter_tech_ingredients = {}
@@ -362,6 +391,8 @@ replace_filename_tree(
   "__base__/graphics/entity/express-transport-belt/express-transport-belt.png",
   "__mega_furnace__/graphics/entity/mega-logistics/mega-transport-belt.png"
 )
+mega_transport_belt.belt_animation_set.alternate = true
+mega_transport_belt.belt_animation_set.animation_set.frame_count = 64
 clear_tint_tree(mega_transport_belt.belt_animation_set)
 
 local mega_transport_belt_item = table.deepcopy(data.raw.item["express-transport-belt"])
@@ -370,7 +401,7 @@ mega_transport_belt_item.icon = "__mega_furnace__/graphics/icons/mega-transport-
 mega_transport_belt_item.icon_size = 64
 mega_transport_belt_item.icons = nil
 mega_transport_belt_item.place_result = MEGA_TRANSPORT_BELT_NAME
-mega_transport_belt_item.order = "a[transport-belt]-d[mega-transport-belt]"
+mega_transport_belt_item.order = high_throughput_transport_belt_order
 
 local mega_transport_belt_recipe = {
   type = "recipe",
@@ -378,8 +409,8 @@ local mega_transport_belt_recipe = {
   category = "crafting-with-fluid",
   enabled = false,
   ingredients = {
-    {type = "item", name = "express-transport-belt", amount = 2},
-    {type = "item", name = "processing-unit", amount = 1},
+    {type = "item", name = high_throughput_belt_ingredient, amount = 2},
+    {type = "item", name = high_throughput_processor_ingredient, amount = 1},
     {type = "item", name = "electric-engine-unit", amount = 1},
     {type = "fluid", name = "lubricant", amount = 40}
   },
@@ -408,6 +439,8 @@ replace_filename_tree(
   "__mega_furnace__/graphics/entity/mega-logistics/mega-underground-belt-structure.png"
 )
 clear_tint_tree(mega_underground_belt.belt_animation_set)
+mega_underground_belt.belt_animation_set.alternate = true
+mega_underground_belt.belt_animation_set.animation_set.frame_count = 64
 clear_tint_tree(mega_underground_belt.structure)
 
 local mega_underground_belt_item = table.deepcopy(data.raw.item["express-underground-belt"])
@@ -416,7 +449,7 @@ mega_underground_belt_item.icon = "__mega_furnace__/graphics/icons/mega-undergro
 mega_underground_belt_item.icon_size = 64
 mega_underground_belt_item.icons = nil
 mega_underground_belt_item.place_result = MEGA_UNDERGROUND_BELT_NAME
-mega_underground_belt_item.order = "b[underground-belt]-d[mega-underground-belt]"
+mega_underground_belt_item.order = high_throughput_underground_belt_order
 
 local mega_underground_belt_recipe = {
   type = "recipe",
@@ -425,8 +458,8 @@ local mega_underground_belt_recipe = {
   enabled = false,
   energy_required = 2,
   ingredients = {
-    {type = "item", name = "express-underground-belt", amount = 2},
-    {type = "item", name = "processing-unit", amount = 4},
+    {type = "item", name = high_throughput_underground_belt_ingredient, amount = 2},
+    {type = "item", name = high_throughput_processor_ingredient, amount = 4},
     {type = "item", name = "electric-engine-unit", amount = 4},
     {type = "fluid", name = "lubricant", amount = 80}
   },
@@ -449,39 +482,61 @@ replace_filename_tree(
   "__base__/graphics/entity/express-transport-belt/express-transport-belt.png",
   "__mega_furnace__/graphics/entity/mega-logistics/mega-transport-belt.png"
 )
-replace_filename_tree(
-  mega_splitter.structure,
-  "__base__/graphics/entity/express-splitter/express-splitter-north.png",
-  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-north.png"
-)
-replace_filename_tree(
-  mega_splitter.structure,
-  "__base__/graphics/entity/express-splitter/express-splitter-east.png",
-  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-east.png"
-)
-replace_filename_tree(
-  mega_splitter.structure,
-  "__base__/graphics/entity/express-splitter/express-splitter-south.png",
-  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-south.png"
-)
-replace_filename_tree(
-  mega_splitter.structure,
-  "__base__/graphics/entity/express-splitter/express-splitter-west.png",
-  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-west.png"
-)
-replace_filename_tree(
-  mega_splitter.structure_patch,
-  "__base__/graphics/entity/express-splitter/express-splitter-east-top_patch.png",
-  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-east-top-patch.png"
-)
-replace_filename_tree(
-  mega_splitter.structure_patch,
-  "__base__/graphics/entity/express-splitter/express-splitter-west-top_patch.png",
-  "__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-west-top-patch.png"
-)
+mega_splitter.structure_animation_speed_coefficient = 1.2
+mega_splitter.structure_animation_movement_cooldown = 10
+mega_splitter.structure =
+{
+  north = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-north",
+    {
+      frame_count = 32,
+      priority = "extra-high",
+      scale = 0.5
+    }
+  ),
+  east = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-east",
+    {
+      frame_count = 32,
+      priority = "extra-high",
+      scale = 0.5
+    }
+  ),
+  south = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-south",
+    {
+      frame_count = 32,
+      priority = "extra-high",
+      scale = 0.5
+    }
+  ),
+  west = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-west",
+    {
+      frame_count = 32,
+      priority = "extra-high",
+      scale = 0.5
+    }
+  )
+}
+mega_splitter.structure_patch =
+{
+  north = util.empty_sprite(),
+  east = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-east-top-patch",
+    {
+      frame_count = 32,
+      priority = "extra-high",
+      scale = 0.5
+    }
+  ),
+  south = util.empty_sprite(),
+  west = util.sprite_load("__mega_furnace__/graphics/entity/mega-logistics/mega-splitter-west-top-patch",
+    {
+      frame_count = 32,
+      priority = "extra-high",
+      scale = 0.5
+    }
+  )
+}
 clear_tint_tree(mega_splitter.belt_animation_set)
-clear_tint_tree(mega_splitter.structure)
-clear_tint_tree(mega_splitter.structure_patch)
+mega_splitter.belt_animation_set.alternate = true
+mega_splitter.belt_animation_set.animation_set.frame_count = 64
 
 local mega_splitter_item = table.deepcopy(data.raw.item["express-splitter"])
 mega_splitter_item.name = MEGA_SPLITTER_NAME
@@ -489,7 +544,7 @@ mega_splitter_item.icon = "__mega_furnace__/graphics/icons/mega-splitter.png"
 mega_splitter_item.icon_size = 64
 mega_splitter_item.icons = nil
 mega_splitter_item.place_result = MEGA_SPLITTER_NAME
-mega_splitter_item.order = "c[splitter]-d[mega-splitter]"
+mega_splitter_item.order = high_throughput_splitter_order
 
 local mega_splitter_recipe = {
   type = "recipe",
@@ -498,8 +553,8 @@ local mega_splitter_recipe = {
   enabled = false,
   energy_required = 2,
   ingredients = {
-    {type = "item", name = "express-splitter", amount = 1},
-    {type = "item", name = "processing-unit", amount = 8},
+    {type = "item", name = high_throughput_splitter_ingredient, amount = 1},
+    {type = "item", name = high_throughput_processor_ingredient, amount = 8},
     {type = "item", name = "electric-engine-unit", amount = 4},
     {type = "fluid", name = "lubricant", amount = 120}
   },
