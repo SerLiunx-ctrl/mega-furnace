@@ -5,6 +5,10 @@ local MEGA_TRANSPORT_BELT_NAME = "mega-transport-belt"
 local MEGA_UNDERGROUND_BELT_NAME = "mega-underground-belt"
 local MEGA_SPLITTER_NAME = "mega-splitter"
 local MEGA_LOGISTICS_TECH_NAME = "mega-logistics"
+local MEGA_MINING_FIELD_NAME = "mega-mining-field"
+local MEGA_MINING_FIELD_TECH_NAME = "mega-mining-field"
+local MEGA_MINING_FIELD_SPINDLE_ANIMATION_NAME = "mega-mining-field-spindle-animation"
+local MEGA_MINING_FIELD_STATUS_GLOW_SPRITE_NAME = "mega-mining-field-status-glow"
 local ASSEMBLING_MACHINE_3_ONLY_CATEGORY = "mega-furnace-assembly"
 local GRAPHICS_SCALE = 5
 
@@ -159,6 +163,7 @@ local low_tier_tech_ingredients = {}
 local high_tier_tech_ingredients = {}
 local inserter_tech_ingredients = {}
 local logistics_tech_ingredients = {}
+local mining_field_tech_ingredients = {}
 local prerequisites = {
   "logistics-3",
   "nuclear-power",
@@ -170,6 +175,7 @@ for _, pack_name in ipairs(low_tier_science_packs) do
     low_tier_tech_ingredients[#low_tier_tech_ingredients + 1] = {pack_name, 1}
     inserter_tech_ingredients[#inserter_tech_ingredients + 1] = {pack_name, 1}
     logistics_tech_ingredients[#logistics_tech_ingredients + 1] = {pack_name, 1}
+    mining_field_tech_ingredients[#mining_field_tech_ingredients + 1] = {pack_name, 1}
   end
 end
 
@@ -583,10 +589,110 @@ local mega_logistics_technology = {
   }
 }
 
+local mega_mining_field = table.deepcopy(data.raw.container["steel-chest"])
+mega_mining_field.name = MEGA_MINING_FIELD_NAME
+mega_mining_field.icon = "__mega_furnace__/graphics/icons/mega-mining-field.png"
+mega_mining_field.icon_size = 64
+mega_mining_field.icons = nil
+mega_mining_field.minable = {mining_time = 2.5, result = MEGA_MINING_FIELD_NAME}
+mega_mining_field.max_health = 1800
+mega_mining_field.fast_replaceable_group = nil
+mega_mining_field.inventory_size = 80
+mega_mining_field.collision_box = {{-2.3, -2.3}, {2.3, 2.3}}
+mega_mining_field.selection_box = {{-2.5, -2.5}, {2.5, 2.5}}
+mega_mining_field.picture = {
+  layers = {
+    {
+      filename = "__mega_furnace__/graphics/entity/mega-mining-field/mega-mining-field.png",
+      priority = "high",
+      width = 320,
+      height = 256,
+      frame_count = 1,
+      line_length = 1,
+      shift = util.by_pixel(0, -10)
+    },
+    {
+      filename = "__mega_furnace__/graphics/entity/mega-mining-field/mega-mining-field-shadow.png",
+      priority = "high",
+      width = 320,
+      height = 256,
+      frame_count = 1,
+      line_length = 1,
+      draw_as_shadow = true,
+      shift = util.by_pixel(0, -10)
+    }
+  }
+}
+
+local mega_mining_field_item = table.deepcopy(data.raw.item["electric-mining-drill"])
+mega_mining_field_item.name = MEGA_MINING_FIELD_NAME
+mega_mining_field_item.icon = "__mega_furnace__/graphics/icons/mega-mining-field.png"
+mega_mining_field_item.icon_size = 64
+mega_mining_field_item.icons = nil
+mega_mining_field_item.place_result = MEGA_MINING_FIELD_NAME
+mega_mining_field_item.order = "b[mining]-z[mega-mining-field]"
+mega_mining_field_item.stack_size = 5
+
+local mega_mining_field_recipe = {
+  type = "recipe",
+  name = MEGA_MINING_FIELD_NAME,
+  category = ASSEMBLING_MACHINE_3_ONLY_CATEGORY,
+  enabled = false,
+  energy_required = 20,
+  ingredients = {
+    {type = "item", name = "electric-mining-drill", amount = 20},
+    {type = "item", name = "processing-unit", amount = 100},
+    {type = "item", name = "electric-engine-unit", amount = 40},
+    {type = "item", name = "steel-plate", amount = 400},
+    {type = "item", name = "refined-concrete", amount = 200},
+    {type = "item", name = "express-transport-belt", amount = 80}
+  },
+  results = {
+    {type = "item", name = MEGA_MINING_FIELD_NAME, amount = 1}
+  }
+}
+
+local mega_mining_field_technology = {
+  type = "technology",
+  name = MEGA_MINING_FIELD_TECH_NAME,
+  icon = "__mega_furnace__/graphics/icons/mega-mining-field.png",
+  icon_size = 64,
+  icons = nil,
+  effects = {
+    {type = "unlock-recipe", recipe = MEGA_MINING_FIELD_NAME}
+  },
+  prerequisites = {
+    "electric-mining-drill",
+    MEGA_FURNACE_NAME
+  },
+  unit = {
+    count = 1500,
+    ingredients = mining_field_tech_ingredients,
+    time = 60
+  }
+}
+
 data:extend({
   {
     type = "recipe-category",
     name = ASSEMBLING_MACHINE_3_ONLY_CATEGORY
+  },
+  {
+    type = "animation",
+    name = MEGA_MINING_FIELD_SPINDLE_ANIMATION_NAME,
+    filename = "__mega_furnace__/graphics/entity/mega-mining-field/mega-mining-field-spindle-animation.png",
+    width = 53,
+    height = 102,
+    frame_count = 8,
+    line_length = 8,
+    animation_speed = 1
+  },
+  {
+    type = "sprite",
+    name = MEGA_MINING_FIELD_STATUS_GLOW_SPRITE_NAME,
+    filename = "__mega_furnace__/graphics/entity/mega-mining-field/mega-mining-field-status-glow.png",
+    width = 128,
+    height = 128
   },
   mega_furnace,
   mega_furnace_item,
@@ -609,5 +715,9 @@ data:extend({
   mega_splitter,
   mega_splitter_item,
   mega_splitter_recipe,
-  mega_logistics_technology
+  mega_logistics_technology,
+  mega_mining_field,
+  mega_mining_field_item,
+  mega_mining_field_recipe,
+  mega_mining_field_technology
 })
