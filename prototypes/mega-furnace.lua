@@ -4,6 +4,7 @@ local MEGA_INSERTER_NAME = "mega-inserter"
 local MEGA_TRANSPORT_BELT_NAME = "mega-transport-belt"
 local MEGA_UNDERGROUND_BELT_NAME = "mega-underground-belt"
 local MEGA_SPLITTER_NAME = "mega-splitter"
+local MEGA_LOADER_NAME = "aai-mega-loader"
 local MEGA_LOGISTICS_TECH_NAME = "mega-logistics"
 local ASSEMBLING_MACHINE_3_ONLY_CATEGORY = "mega-furnace-assembly"
 local GRAPHICS_SCALE = 5
@@ -88,24 +89,22 @@ if assembling_machine_3 then
   end
 end
 
-local express_transport_belt = data.raw["transport-belt"] and data.raw["transport-belt"]["express-transport-belt"]
-if express_transport_belt then
-  express_transport_belt.next_upgrade = MEGA_TRANSPORT_BELT_NAME
+local logistics_upgrade_source = (mods["space-age"] and data.raw["transport-belt"] and data.raw["transport-belt"]["turbo-transport-belt"])
+  or (data.raw["transport-belt"] and data.raw["transport-belt"]["express-transport-belt"])
+if logistics_upgrade_source then
+  logistics_upgrade_source.next_upgrade = MEGA_TRANSPORT_BELT_NAME
 end
 
-local express_underground_belt = data.raw["underground-belt"] and data.raw["underground-belt"]["express-underground-belt"]
-if express_underground_belt then
-  express_underground_belt.next_upgrade = MEGA_UNDERGROUND_BELT_NAME
+local underground_upgrade_source = (mods["space-age"] and data.raw["underground-belt"] and data.raw["underground-belt"]["turbo-underground-belt"])
+  or (data.raw["underground-belt"] and data.raw["underground-belt"]["express-underground-belt"])
+if underground_upgrade_source then
+  underground_upgrade_source.next_upgrade = MEGA_UNDERGROUND_BELT_NAME
 end
 
-local express_splitter = data.raw.splitter and data.raw.splitter["express-splitter"]
-if express_splitter then
-  express_splitter.next_upgrade = MEGA_SPLITTER_NAME
-end
-
-local bulk_inserter = data.raw.inserter and data.raw.inserter["bulk-inserter"]
-if bulk_inserter then
-  bulk_inserter.next_upgrade = MEGA_INSERTER_NAME
+local splitter_upgrade_source = (mods["space-age"] and data.raw.splitter and data.raw.splitter["turbo-splitter"])
+  or (data.raw.splitter and data.raw.splitter["express-splitter"])
+if splitter_upgrade_source then
+  splitter_upgrade_source.next_upgrade = MEGA_SPLITTER_NAME
 end
 
 local ordered_science_packs = {
@@ -141,9 +140,27 @@ if mods["space-age"] and data.raw.item["turbo-splitter"] then
   high_throughput_splitter_ingredient = "turbo-splitter"
 end
 
+local high_throughput_loader_ingredient = "aai-express-loader"
+if mods["space-age"] and data.raw.item["aai-turbo-loader"] then
+  high_throughput_loader_ingredient = "aai-turbo-loader"
+end
+
 local high_throughput_processor_ingredient = "processing-unit"
 if mods["space-age"] and data.raw.item["quantum-processor"] then
   high_throughput_processor_ingredient = "quantum-processor"
+end
+
+local mega_inserter_base_name = "bulk-inserter"
+if mods["space-age"] and data.raw.inserter["stack-inserter"] and data.raw.item["stack-inserter"] then
+  mega_inserter_base_name = "stack-inserter"
+end
+
+local mega_inserter_base_item = data.raw.item[mega_inserter_base_name]
+local mega_inserter_order = ((mega_inserter_base_item and mega_inserter_base_item.order) or "f[bulk-inserter]") .. "-z[mega-inserter]"
+
+local mega_inserter_upgrade_source = data.raw.inserter and data.raw.inserter[mega_inserter_base_name]
+if mega_inserter_upgrade_source then
+  mega_inserter_upgrade_source.next_upgrade = MEGA_INSERTER_NAME
 end
 
 local high_throughput_transport_belt_order = "a[transport-belt]-d[mega-transport-belt]"
@@ -308,7 +325,7 @@ local mega_furnace_2_technology = {
   }
 }
 
-local mega_inserter = table.deepcopy(data.raw.inserter["bulk-inserter"])
+local mega_inserter = table.deepcopy(data.raw.inserter[mega_inserter_base_name])
 mega_inserter.name = MEGA_INSERTER_NAME
 mega_inserter.icon = "__mega_furnace__/graphics/icons/mega-inserter.png"
 mega_inserter.icon_size = 64
@@ -324,18 +341,18 @@ mega_inserter.filter_count = 5
 mega_inserter.next_upgrade = nil
 mega_inserter.stack_size_bonus = 29
 mega_inserter.uses_inserter_stack_size_bonus = false
-mega_inserter.hand_base_picture.tint = {r = 0.84, g = 0.48, b = 1.0, a = 1.0}
-mega_inserter.hand_closed_picture.tint = {r = 0.84, g = 0.48, b = 1.0, a = 1.0}
-mega_inserter.hand_open_picture.tint = {r = 0.84, g = 0.48, b = 1.0, a = 1.0}
-mega_inserter.platform_picture.sheet.tint = {r = 0.70, g = 0.36, b = 0.98, a = 1.0}
+mega_inserter.hand_base_picture.tint = {r = 0.42, g = 1.0, b = 0.36, a = 1.0}
+mega_inserter.hand_closed_picture.tint = {r = 0.42, g = 1.0, b = 0.36, a = 1.0}
+mega_inserter.hand_open_picture.tint = {r = 0.42, g = 1.0, b = 0.36, a = 1.0}
+mega_inserter.platform_picture.sheet.tint = {r = 0.18, g = 0.88, b = 0.24, a = 1.0}
 
-local mega_inserter_item = table.deepcopy(data.raw.item["bulk-inserter"])
+local mega_inserter_item = table.deepcopy(mega_inserter_base_item)
 mega_inserter_item.name = MEGA_INSERTER_NAME
 mega_inserter_item.icon = "__mega_furnace__/graphics/icons/mega-inserter.png"
 mega_inserter_item.icon_size = 64
 mega_inserter_item.icons = nil
 mega_inserter_item.place_result = MEGA_INSERTER_NAME
-mega_inserter_item.order = "f[bulk-inserter]-z[mega-inserter]"
+mega_inserter_item.order = mega_inserter_order
 mega_inserter_item.stack_size = 50
 mega_inserter_item.weight = 60 * kg
 
@@ -345,7 +362,7 @@ local mega_inserter_recipe = {
   enabled = false,
   energy_required = 12,
   ingredients = {
-    {type = "item", name = "bulk-inserter", amount = 4},
+    {type = "item", name = mega_inserter_base_name, amount = 4},
     {type = "item", name = "processing-unit", amount = 20},
     {type = "item", name = "electric-engine-unit", amount = 20},
     {type = "item", name = "low-density-structure", amount = 10},
@@ -375,7 +392,7 @@ local mega_inserter_technology = {
   }
 }
 
-local high_throughput_tint = {r = 0.82, g = 0.48, b = 1.0, a = 1.0}
+local high_throughput_tint = {r = 0.42, g = 1.0, b = 0.36, a = 1.0}
 
 local mega_transport_belt = table.deepcopy(data.raw["transport-belt"]["express-transport-belt"])
 mega_transport_belt.name = MEGA_TRANSPORT_BELT_NAME
@@ -585,3 +602,47 @@ data:extend({
   mega_splitter_recipe,
   mega_logistics_technology
 })
+
+if mods["aai-loaders"] and AAILoaders and data.raw["transport-belt"][MEGA_TRANSPORT_BELT_NAME] then
+  local loader_crafting_category = mods["space-age"] and "crafting-with-fluid-or-metallurgy" or "crafting-with-fluid"
+  local mega_loader_result = AAILoaders.make_tier{
+    name = "mega",
+    transport_belt = MEGA_TRANSPORT_BELT_NAME,
+    color = high_throughput_tint,
+    fluid = "lubricant",
+    fluid_per_minute = "0.35",
+    localised_name = {"entity-name.mega-loader"},
+    order = mods["space-age"] and "d[loader]-e[aai-mega-loader]" or "d[loader]-d[aai-mega-loader]",
+    recipe = {
+      crafting_category = loader_crafting_category,
+      ingredients = {
+        {type = "item", name = high_throughput_loader_ingredient, amount = 1},
+        {type = "item", name = MEGA_TRANSPORT_BELT_NAME, amount = 2},
+        {type = "item", name = high_throughput_processor_ingredient, amount = 8},
+        {type = "item", name = "electric-engine-unit", amount = 8},
+        {type = "fluid", name = "lubricant", amount = 80}
+      },
+      energy_required = 3
+    },
+    unlubricated_recipe = {
+      crafting_category = loader_crafting_category,
+      ingredients = {
+        {type = "item", name = high_throughput_loader_ingredient, amount = 1},
+        {type = "item", name = MEGA_TRANSPORT_BELT_NAME, amount = 20},
+        {type = "item", name = high_throughput_processor_ingredient, amount = 80},
+        {type = "item", name = "electric-engine-unit", amount = 80},
+        {type = "fluid", name = "lubricant", amount = 800}
+      },
+      energy_required = 12
+    }
+  }
+
+  local loader_upgrade_source = data.raw["loader-1x1"] and data.raw["loader-1x1"][high_throughput_loader_ingredient]
+  if mega_loader_result and mega_loader_result.loader and loader_upgrade_source then
+    loader_upgrade_source.next_upgrade = MEGA_LOADER_NAME
+  end
+
+  if mega_loader_result and mega_loader_result.recipe and data.raw.technology[MEGA_LOGISTICS_TECH_NAME] then
+    table.insert(data.raw.technology[MEGA_LOGISTICS_TECH_NAME].effects, {type = "unlock-recipe", recipe = MEGA_LOADER_NAME})
+  end
+end
