@@ -178,6 +178,14 @@ local function add_existing_prerequisite(prerequisites, technology_name)
   end
 end
 
+local function add_existing_science_packs(ingredients, pack_names)
+  for _, pack_name in ipairs(pack_names) do
+    if data.raw.tool[pack_name] then
+      ingredients[#ingredients + 1] = {pack_name, 1}
+    end
+  end
+end
+
 local low_tier_tech_ingredients = {}
 local high_tier_tech_ingredients = {}
 local inserter_tech_ingredients = {}
@@ -200,6 +208,24 @@ for _, pack_name in ipairs(ordered_science_packs) do
   if data.raw.tool[pack_name] then
     high_tier_tech_ingredients[#high_tier_tech_ingredients + 1] = {pack_name, 1}
   end
+end
+
+if mods["space-age"] then
+  add_existing_science_packs(inserter_tech_ingredients, {
+    "metallurgic-science-pack",
+    "electromagnetic-science-pack"
+  })
+  add_existing_science_packs(logistics_tech_ingredients, {
+    "electromagnetic-science-pack",
+    "agricultural-science-pack",
+    "cryogenic-science-pack"
+  })
+  add_existing_science_packs(high_tier_tech_ingredients, {
+    "metallurgic-science-pack",
+    "electromagnetic-science-pack",
+    "agricultural-science-pack",
+    "cryogenic-science-pack"
+  })
 end
 
 local mega_furnace = table.deepcopy(data.raw.furnace["electric-furnace"])
@@ -232,20 +258,37 @@ mega_furnace_item.place_result = MEGA_FURNACE_NAME
 mega_furnace_item.order = "c[electric-furnace]-z[mega-furnace]"
 mega_furnace_item.stack_size = 10
 
+local mega_furnace_ingredients = {
+  {type = "item", name = "heat-pipe", amount = 25},
+  {type = "item", name = "express-transport-belt", amount = 16},
+  {type = "item", name = "processing-unit", amount = 250},
+  {type = "item", name = "electric-furnace", amount = 16},
+  {type = "item", name = "steel-plate", amount = 500},
+  {type = "item", name = "refined-concrete", amount = 50}
+}
+
+if mods["space-age"]
+  and data.raw.item["turbo-transport-belt"]
+  and data.raw.item["tungsten-plate"] then
+  mega_furnace_ingredients = {
+    {type = "item", name = "heat-pipe", amount = 25},
+    {type = "item", name = "turbo-transport-belt", amount = 12},
+    {type = "item", name = "processing-unit", amount = 200},
+    {type = "item", name = "electric-furnace", amount = 16},
+    {type = "item", name = "tungsten-plate", amount = 80},
+    {type = "item", name = "steel-plate", amount = 400},
+    {type = "item", name = "refined-concrete", amount = 50}
+  }
+  add_existing_prerequisite(prerequisites, "turbo-transport-belt")
+end
+
 local mega_furnace_recipe = {
   type = "recipe",
   name = MEGA_FURNACE_NAME,
   category = ASSEMBLING_MACHINE_3_ONLY_CATEGORY,
   enabled = false,
   energy_required = 20,
-  ingredients = {
-    {type = "item", name = "heat-pipe", amount = 25},
-    {type = "item", name = "express-transport-belt", amount = 16},
-    {type = "item", name = "processing-unit", amount = 250},
-    {type = "item", name = "electric-furnace", amount = 16},
-    {type = "item", name = "steel-plate", amount = 500},
-    {type = "item", name = "refined-concrete", amount = 50}
-  },
+  ingredients = mega_furnace_ingredients,
   results = {
     {type = "item", name = MEGA_FURNACE_NAME, amount = 1}
   }
@@ -398,7 +441,7 @@ local mega_inserter_recipe = {
   energy_required = 12,
   ingredients = {
     {type = "item", name = mega_inserter_base_name, amount = 4},
-    {type = "item", name = "processing-unit", amount = 20},
+    {type = "item", name = high_throughput_processor_ingredient, amount = 20},
     {type = "item", name = "electric-engine-unit", amount = 20},
     {type = "item", name = "low-density-structure", amount = 10},
     {type = "item", name = "steel-plate", amount = 40}
