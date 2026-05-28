@@ -1,13 +1,4 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.1.5
-Date: 2026-05-28
-  Compatibility:
-    - Mega Furnace 1 recipe now uses turbo-transport-belt and tungsten-plate when Space Age content is available.
-    - High-Throughput Inserter recipe now uses quantum-processor in Space Age, matching the belt-tier ingredient adaptation.
-    - All advanced technologies now require Space-Age-specific science packs (metallurgic, electromagnetic, agricultural, cryogenic) when the DLC is active.
-    - Mega Furnace 1 technology now lists turbo-transport-belt as an additional prerequisite in Space Age.
-
----------------------------------------------------------------------------------------------------
 Version: 0.1.4
 Date: 2026-05-28
   Features:
