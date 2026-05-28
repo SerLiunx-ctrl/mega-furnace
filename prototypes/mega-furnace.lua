@@ -172,6 +172,12 @@ if mods["space-age"] then
   high_throughput_splitter_order = "c[splitter]-e[mega-splitter]"
 end
 
+local function add_existing_prerequisite(prerequisites, technology_name)
+  if data.raw.technology[technology_name] then
+    prerequisites[#prerequisites + 1] = technology_name
+  end
+end
+
 local low_tier_tech_ingredients = {}
 local high_tier_tech_ingredients = {}
 local inserter_tech_ingredients = {}
@@ -286,21 +292,53 @@ mega_furnace_2_item.place_result = MEGA_FURNACE_2_NAME
 mega_furnace_2_item.order = "c[electric-furnace]-zz[mega-furnace-2]"
 mega_furnace_2_item.stack_size = 5
 
+local mega_furnace_2_ingredients = {
+  {type = "item", name = MEGA_FURNACE_NAME, amount = 1},
+  {type = "item", name = "low-density-structure", amount = 200},
+  {type = "item", name = "processing-unit", amount = 375},
+  {type = "item", name = "heat-pipe", amount = 100},
+  {type = "item", name = "express-transport-belt", amount = 64},
+  {type = "item", name = "steel-plate", amount = 1000},
+  {type = "item", name = "refined-concrete", amount = 250}
+}
+
+local mega_furnace_2_prerequisites = {
+  MEGA_FURNACE_NAME,
+  "rocket-silo"
+}
+
+if mods["space-age"]
+  and data.raw.item["turbo-transport-belt"]
+  and data.raw.item["quantum-processor"]
+  and data.raw.item["tungsten-plate"]
+  and data.raw.item["tungsten-carbide"] then
+  mega_furnace_2_ingredients = {
+    {type = "item", name = MEGA_FURNACE_NAME, amount = 1},
+    {type = "item", name = "turbo-transport-belt", amount = 64},
+    {type = "item", name = "quantum-processor", amount = 120},
+    {type = "item", name = "tungsten-plate", amount = 200},
+    {type = "item", name = "tungsten-carbide", amount = 100},
+    {type = "item", name = "heat-pipe", amount = 100},
+    {type = "item", name = "low-density-structure", amount = 100},
+    {type = "item", name = "refined-concrete", amount = 200}
+  }
+
+  if data.raw.item["foundry"] then
+    mega_furnace_2_ingredients[#mega_furnace_2_ingredients + 1] = {type = "item", name = "foundry", amount = 2}
+  end
+
+  add_existing_prerequisite(mega_furnace_2_prerequisites, "turbo-transport-belt")
+  add_existing_prerequisite(mega_furnace_2_prerequisites, "quantum-processor")
+  add_existing_prerequisite(mega_furnace_2_prerequisites, "foundry")
+end
+
 local mega_furnace_2_recipe = {
   type = "recipe",
   name = MEGA_FURNACE_2_NAME,
   category = ASSEMBLING_MACHINE_3_ONLY_CATEGORY,
   enabled = false,
   energy_required = 50,
-  ingredients = {
-    {type = "item", name = MEGA_FURNACE_NAME, amount = 1},
-    {type = "item", name = "low-density-structure", amount = 200},
-    {type = "item", name = "processing-unit", amount = 375},
-    {type = "item", name = "heat-pipe", amount = 100},
-    {type = "item", name = "express-transport-belt", amount = 64},
-    {type = "item", name = "steel-plate", amount = 1000},
-    {type = "item", name = "refined-concrete", amount = 250}
-  },
+  ingredients = mega_furnace_2_ingredients,
   results = {
     {type = "item", name = MEGA_FURNACE_2_NAME, amount = 1}
   }
@@ -314,10 +352,7 @@ local mega_furnace_2_technology = {
   effects = {
     {type = "unlock-recipe", recipe = MEGA_FURNACE_2_NAME}
   },
-  prerequisites = {
-    MEGA_FURNACE_NAME,
-    "rocket-silo"
-  },
+  prerequisites = mega_furnace_2_prerequisites,
   unit = {
     count = 5000,
     ingredients = high_tier_tech_ingredients,
@@ -339,8 +374,8 @@ mega_inserter.extension_speed = 0.16
 mega_inserter.rotation_speed = 0.075
 mega_inserter.filter_count = 5
 mega_inserter.next_upgrade = nil
-mega_inserter.stack_size_bonus = 29
-mega_inserter.uses_inserter_stack_size_bonus = false
+mega_inserter.bulk = true
+mega_inserter.stack = true
 mega_inserter.hand_base_picture.tint = {r = 0.42, g = 1.0, b = 0.36, a = 1.0}
 mega_inserter.hand_closed_picture.tint = {r = 0.42, g = 1.0, b = 0.36, a = 1.0}
 mega_inserter.hand_open_picture.tint = {r = 0.42, g = 1.0, b = 0.36, a = 1.0}

@@ -1,4 +1,14 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.4
+Date: 2026-05-28
+  Features:
+    - High-Throughput Inserter now supports belt stacking (same as Space Age stack inserter).
+    - High-Throughput Inserter inherits base stack size bonus and scales with inserter capacity research instead of a fixed 30.
+  Compatibility:
+    - Mega Furnace 2 recipe now dynamically uses turbo belts, quantum processors, tungsten, and foundries when Space Age content is available.
+    - Mega Furnace 2 technology prerequisites now adapt to Space Age-specific technologies.
+
+---------------------------------------------------------------------------------------------------
 Version: 0.1.3
 Date: 2026-04-04
   Graphics:
